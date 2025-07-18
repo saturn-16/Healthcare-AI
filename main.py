@@ -55,7 +55,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Gemini API Key
-genai.configure(api_key="AIzaSyDk_wMe-QLDDmj_NnYJxSLKzulEmgNCbQo")
+genai.configure(api_key="your-api-key")
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 # Session State
