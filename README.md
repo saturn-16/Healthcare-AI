@@ -2,6 +2,8 @@
 
 This is a simple AI-powered chatbot web app built using **Flask** and **Gemini 1.5 Flash**, designed to help users ask **medical or eye-care-related questions** in **Hindi or English**. The chatbot gives AI-generated answers and allows you to translate the response between both languages.
 
+You can visit the website here - https://healthcare-ai-1-5ckw.onrender.com
+
 ---
 
 ## 🚀 Features
