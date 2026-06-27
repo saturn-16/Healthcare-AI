@@ -1,34 +1,36 @@
-# 🩺 Eye Care Chatbot (Hindi + English Support)
+# 🩺 MedAI — Premium AI Healthcare Assistant (Vercel Deployed)
 
-This is a simple AI-powered chatbot web app built using **Flask** and **Gemini 1.5 Flash**, designed to help users ask **medical or eye-care-related questions** in **Hindi or English**. The chatbot gives AI-generated answers and allows you to translate the response between both languages.
+MedAI is a premium, light-themed, AI-powered healthcare assistant built with **React**, **Vite**, and **Tailwind CSS 4**. It features an elegant dashboard inspired by the **Healthink** design aesthetic, a dynamic holographic human body diagram with floating and scanning animations, and integrates directly with the **Groq API** (Llama-3.3-70b-versatile) for real-time, low-latency streaming diagnostic answers in both English and Hindi.
 
-You can visit the website here - https://healthcare-ai-1-5ckw.onrender.com
-
----
-
-## 🚀 Features
-
-- 🌐 Ask health-related questions in **English or Hindi**
-- 🤖 AI responses generated using **Gemini 1.5 Flash (Google Generative AI)**
-- 🔤 Toggle the **answer language** between English and Hindi (even after response)
-- 🧠 Simple, clean, fast web interface using Flask
+🚀 **Live Site:** [frontend-silk-tau-72.vercel.app](https://frontend-silk-tau-72.vercel.app)
 
 ---
 
-## 🧩 Tech Stack
+## 🎨 Key Features & UI Improvements
 
-- Python
-- Flask
-- Google Generative AI (Gemini 1.5 Flash)
-- Deep Translator
-- LangDetect
-- HTML + Jinja2
+- 🌞 **Premium Light Aesthetic**: Transitioned from a dark theme to a clean white and gray clinical interface with smooth drop shadows.
+- 🧑‍🎨 **Interactive Holographic Body**: A beautifully animated, glowing blue human wireframe diagram on the dashboard with 4 layered animations (floating, breathing glow, vertical radar/scanner sweep, and drifting micro-particles).
+- 📋 **Elevated Dashboard Cards**: Staggered entrance animations, lift-on-hover effects, and responsive forms for Patient Profiles (Age, Weight, Gender) and Quick Health Questions.
+- ⚡ **Groq Llama-3.3 Integration**: Migrated backend services to Groq's high-speed completion API for instant diagnostic advice and responses.
+- 🌐 **Bilingual (English + Hindi)**: Fully localizable content and translation capabilities, toggled easily in the topbar or sidebar.
 
 ---
 
-Set your Gemini API key
-Make sure you add your Gemini API key in chatbot.py:
+## 🛠️ Tech Stack
 
-Run the app
-streamlit run main.py
+- **Core**: React 19, Vite 8, Tailwind CSS v4, Framer Motion (animations)
+- **APIs**: Groq Cloud SDK (OpenAI-compatible client)
+- **Deployment**: Vercel Production Hosting
 
+---
+
+## 📁 Repository Structure
+
+```
+├── frontend/             # Standalone React + Vite Single Page Application
+│   ├── src/
+│   │   ├── components/   # UI elements (Holographic body, Topbar, Sidebar)
+│   │   ├── pages/        # Dashboard, AIConsultation, SymptomChecker
+│   │   ├── services/     # Groq API streaming logic
+│   │   └── context/      # Language & Translation Context
+```
