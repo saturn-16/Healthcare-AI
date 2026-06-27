@@ -1,0 +1,10 @@
+{
+  "name": "healthcare-ai-root",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "build": "npm run build -w frontend && mv frontend/dist ./dist"
+  }
+}
