@@ -3,7 +3,6 @@
 MedAI is a high-fidelity, light-themed React single-page application (SPA) integrated with an Express backend and SQLite database to facilitate intelligent patient triage, symptom tracking, and diagnostic consultation. Powered by advanced AI inference, the interface translates patient-reported parameters into structured clinical assessments.
 
 *   **Production Deployment:** [frontend-silk-tau-72.vercel.app](https://frontend-silk-tau-72.vercel.app)
-*   **Backend API Endpoint:** [healthcare-ai-1-bozl.onrender.com](https://healthcare-ai-1-bozl.onrender.com)
 *   **Target Models:** `llama-3.3-70b-versatile` (Primary Inference Engine)
 *   **Supported Locales:** English, Hindi (Dual-language toggle)
 
