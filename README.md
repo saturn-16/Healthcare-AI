@@ -4,7 +4,7 @@ MedAI is a high-fidelity, light-themed React single-page application (SPA) desig
 
 *   **Production Deployment:** [frontend-silk-tau-72.vercel.app](https://frontend-silk-tau-72.vercel.app)
 *   **Target Models:** `llama-3.3-70b-versatile` (Primary Inference Engine)
-*   **Supported Locales:** English, Hindi (dual-locale contextual switching)
+*   **Supported Locales:** English and Hindi
 
 ---
 
