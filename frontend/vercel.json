@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://healthcare-ai-1-bozl.onrender.com/api/:path*"
+    }
+  ]
+}
