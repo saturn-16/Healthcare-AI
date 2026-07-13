@@ -5,6 +5,6 @@
     "frontend"
   ],
   "scripts": {
-    "build": "npm run build -w frontend && mv frontend/dist ./dist"
+    "build": "npm run build -w frontend && npx shx rm -rf ./dist && npx shx mv frontend/dist ./dist"
   }
 }
