@@ -84,24 +84,25 @@
 .sm-toggle-textWrap {
   position: relative;
   display: inline-block;
-  height: 1em;
+  height: 1.2em;
   overflow: hidden;
   white-space: nowrap;
-  width: var(--sm-toggle-width, 3.5rem);
-  min-width: var(--sm-toggle-width, 3.5rem);
+  width: var(--sm-toggle-width, 4.2rem);
+  min-width: var(--sm-toggle-width, 4.2rem);
 }
 
 .sm-toggle-textInner {
   display: flex;
   flex-direction: column;
-  line-height: 1;
+  line-height: 1.2;
   text-align: left;
 }
 
 .sm-toggle-line {
-  display: block;
-  height: 1em;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: 1.2em;
+  line-height: 1.2;
 }
 
 .sm-icon {

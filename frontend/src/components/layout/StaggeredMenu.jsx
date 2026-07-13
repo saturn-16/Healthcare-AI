@@ -6,7 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import './StaggeredMenu.css';
 
 export const StaggeredMenu = ({
-  position = 'right',
+  position = 'left', // Set default to left so it opens from the left side
   colors = ['#EFF6FF', '#DBEAFE', '#93C5FD'], // Professional light blue layers matching Healthink
   socialItems = [
     { label: 'GitHub', link: 'https://github.com/saturn-16/Healthcare-AI' }
@@ -45,9 +45,10 @@ export const StaggeredMenu = ({
   const busyRef = useRef(false);
   const itemEntranceTweenRef = useRef(null);
 
-  // Dynamic translated menu items, excluding settings & guest options
+  // Dynamic translated menu items, including Home (/) and Dashboard (/dashboard)
   const menuItems = [
-    { label: t.dashboard, ariaLabel: 'Go to dashboard', link: '/' },
+    { label: t.home, ariaLabel: 'Go to home page', link: '/' },
+    { label: t.dashboard, ariaLabel: 'Go to dashboard', link: '/dashboard' },
     { label: t.aiConsultation, ariaLabel: 'Start AI Consultation', link: '/consultation' },
     { label: t.symptomChecker, ariaLabel: 'Open Symptom Checker', link: '/symptoms' },
     { label: t.healthHistory, ariaLabel: 'View Health History', link: '/history' },
@@ -388,27 +389,8 @@ export const StaggeredMenu = ({
       </div>
       
       <header className="staggered-menu-header" aria-label="Main navigation header">
-        {/* Customized Logo to show MedAI Brand Text */}
-        <div className="sm-logo flex flex-col justify-center select-none" aria-label="Logo">
-          <span className="text-xl font-bold tracking-tight text-gray-950 block leading-none">
-            {t.appName}
-          </span>
-          <span className="text-[10px] text-blue-600 font-semibold tracking-wider uppercase mt-1">
-            {t.appTagline}
-          </span>
-        </div>
-
+        {/* Left Side: Staggered Menu Toggle Button and Logo next to it */}
         <div className="flex items-center gap-4">
-          {/* Language toggle kept in the header */}
-          <button
-            onClick={toggleLanguage}
-            className="flex items-center gap-1.5 rounded-full bg-white/80 hover:bg-gray-100/90 text-gray-800 border border-gray-200/80 px-4 py-2 text-xs font-semibold shadow-sm transition-all pointer-events-auto cursor-pointer"
-          >
-            <Globe className="h-4 w-4 text-blue-500" />
-            {language === 'en' ? 'हिंदी' : 'English'}
-          </button>
-
-          {/* Staggered Menu Toggle Button */}
           <button
             ref={toggleBtnRef}
             className="sm-toggle pointer-events-auto"
@@ -432,7 +414,26 @@ export const StaggeredMenu = ({
               <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
             </span>
           </button>
+
+          {/* Logo Branding */}
+          <div className="sm-logo flex flex-col justify-center select-none ml-1" aria-label="Logo">
+            <span className="text-xl font-bold tracking-tight text-gray-900 block leading-none">
+              {t.appName}
+            </span>
+            <span className="text-[10px] text-blue-600 font-semibold tracking-wider uppercase mt-1">
+              {t.appTagline}
+            </span>
+          </div>
         </div>
+
+        {/* Right Side: Language Toggle */}
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-1.5 rounded-full bg-white/80 hover:bg-gray-100/90 text-gray-800 border border-gray-200/80 px-4 py-2 text-xs font-semibold shadow-sm transition-all pointer-events-auto cursor-pointer"
+        >
+          <Globe className="h-4 w-4 text-blue-500" />
+          {language === 'en' ? 'हिंदी' : 'English'}
+        </button>
       </header>
 
       <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
@@ -441,7 +442,6 @@ export const StaggeredMenu = ({
             {menuItems && menuItems.length ? (
               menuItems.map((it, idx) => (
                 <li className="sm-panel-itemWrap" key={it.label + idx}>
-                  {/* Using React Router Link to avoid full page reloads and auto-closing the menu */}
                   <Link
                     className="sm-panel-item"
                     to={it.link}

@@ -14,6 +14,8 @@ const fieldVariants = {
   }),
 };
 
+import { useEffect } from "react";
+
 export default function HealthInputPanel({ onAnalyze }) {
   const { t, language } = useLanguage();
   const [age, setAge] = useState("");
@@ -22,6 +24,36 @@ export default function HealthInputPanel({ onAnalyze }) {
   const [bloodGroup, setBloodGroup] = useState("");
   const [symptoms, setSymptoms] = useState("");
   const [allergies, setAllergies] = useState("");
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("medai_patient_profile");
+    if (savedProfile) {
+      const data = JSON.parse(savedProfile);
+      setAge(data.age || "");
+      setWeight(data.weight || "");
+      setGender(data.gender || "");
+      setBloodGroup(data.bloodGroup || "");
+      setSymptoms(data.symptoms || "");
+      setAllergies(data.allergies || "");
+    }
+  }, []);
+
+  const handleProfileChange = (field, value) => {
+    const saved = localStorage.getItem("medai_patient_profile");
+    const current = saved ? JSON.parse(saved) : {};
+    current[field] = value;
+    
+    // Set local states
+    if (field === "age") setAge(value);
+    if (field === "weight") setWeight(value);
+    if (field === "gender") setGender(value);
+    if (field === "bloodGroup") setBloodGroup(value);
+    if (field === "symptoms") setSymptoms(value);
+    if (field === "allergies") setAllergies(value);
+
+    localStorage.setItem("medai_patient_profile", JSON.stringify(current));
+  };
 
   const handleAnalyze = () => {
     if (onAnalyze) {
@@ -56,7 +88,7 @@ export default function HealthInputPanel({ onAnalyze }) {
               min="0"
               max="120"
               value={age}
-              onChange={(e) => setAge(e.target.value)}
+              onChange={(e) => handleProfileChange("age", e.target.value)}
               className="input-premium w-full text-sm"
               placeholder={language === "hi" ? "जैसे 34" : "e.g. 34"}
             />
@@ -68,7 +100,7 @@ export default function HealthInputPanel({ onAnalyze }) {
               type="number"
               min="0"
               value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              onChange={(e) => handleProfileChange("weight", e.target.value)}
               className="input-premium w-full text-sm"
               placeholder={language === "hi" ? "जैसे 70" : "e.g. 70"}
             />
@@ -81,7 +113,7 @@ export default function HealthInputPanel({ onAnalyze }) {
           <select
             id="patient-gender"
             value={gender}
-            onChange={(e) => setGender(e.target.value)}
+            onChange={(e) => handleProfileChange("gender", e.target.value)}
             className="input-premium w-full text-sm appearance-none cursor-pointer"
           >
             <option value="">{t.selectGender}</option>
@@ -97,7 +129,7 @@ export default function HealthInputPanel({ onAnalyze }) {
           <select
             id="patient-blood-group"
             value={bloodGroup}
-            onChange={(e) => setBloodGroup(e.target.value)}
+            onChange={(e) => handleProfileChange("bloodGroup", e.target.value)}
             className="input-premium w-full text-sm appearance-none cursor-pointer"
           >
             <option value="">{language === "hi" ? "रक्त समूह चुनें" : "Select blood group"}</option>
@@ -114,7 +146,7 @@ export default function HealthInputPanel({ onAnalyze }) {
             <textarea
               id="patient-symptoms"
               value={symptoms}
-              onChange={(e) => setSymptoms(e.target.value)}
+              onChange={(e) => handleProfileChange("symptoms", e.target.value)}
               className="input-premium w-full h-24 resize-none text-sm"
               placeholder={t.symptomsPlaceholder}
             />
@@ -130,7 +162,7 @@ export default function HealthInputPanel({ onAnalyze }) {
           <textarea
             id="patient-allergies"
             value={allergies}
-            onChange={(e) => setAllergies(e.target.value)}
+            onChange={(e) => handleProfileChange("allergies", e.target.value)}
             className="input-premium w-full h-16 resize-none text-sm"
             placeholder={language === "hi" ? "कोई एलर्जी, पुरानी बीमारी..." : "Any allergies, chronic conditions..."}
           />

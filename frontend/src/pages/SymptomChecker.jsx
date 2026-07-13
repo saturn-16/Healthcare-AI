@@ -5,6 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { SYMPTOM_CATEGORIES } from "../services/GeminiService";
 import geminiService from "../services/GeminiService";
 import ReactMarkdown from "react-markdown";
+import { db } from "../services/db";
 
 export default function SymptomChecker() {
   const { language, t } = useLanguage();
@@ -52,10 +53,38 @@ export default function SymptomChecker() {
       : `I am experiencing the following symptoms:\n${categoryNames ? `Categories: ${categoryNames}` : ""}${freeText ? `\nDescription: ${freeText}` : ""}\n\nPlease provide a detailed medical assessment, possible causes, recommended investigations, and next steps.`;
 
     try {
+      let fullText = "";
       await geminiService.streamResponse(prompt, (chunk) => {
-        setResult((prev) => prev + chunk);
+        fullText += chunk;
+        setResult(fullText);
         resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
       });
+
+      // Save to SQL Database
+      const symptomsString = [categoryNames, freeText].filter(Boolean).join("; ");
+      let risk_level = "Low";
+      const lowerText = fullText.toLowerCase();
+      if (lowerText.includes("emergency") || lowerText.includes("immediate care") || lowerText.includes("severe") || lowerText.includes("गंभीर") || lowerText.includes("आपातकालीन")) {
+        risk_level = "High";
+      } else if (lowerText.includes("moderate") || lowerText.includes("consult a doctor") || lowerText.includes("चिकित्सक से") || lowerText.includes("मध्यम")) {
+        risk_level = "Moderate";
+      }
+
+      const storedProfile = localStorage.getItem("medai_patient_profile");
+      const profile = storedProfile ? JSON.parse(storedProfile) : {};
+
+      await db.addEncounter({
+        timestamp: new Date().toISOString(),
+        age: parseInt(profile.age) || 34,
+        weight: parseInt(profile.weight) || 72,
+        gender: profile.gender || "male",
+        type: "symptoms",
+        symptoms: symptomsString || "Self-reported symptoms",
+        risk_level: risk_level,
+        summary: fullText,
+        chat_history: "[]"
+      });
+
     } catch (e) {
       setResult(language === "hi" ? "विश्लेषण में त्रुटि।" : "Error during analysis.");
     } finally {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Stethoscope,
@@ -36,6 +36,28 @@ export default function Dashboard() {
   const [gender, setGender] = useState("");
   const [question, setQuestion] = useState("");
 
+  useEffect(() => {
+    const saved = localStorage.getItem("medai_patient_profile");
+    if (saved) {
+      const data = JSON.parse(saved);
+      setAge(data.age || "");
+      setWeight(data.weight || "");
+      setGender(data.gender || "");
+    }
+  }, []);
+
+  const handleProfileChange = (field, value) => {
+    const saved = localStorage.getItem("medai_patient_profile");
+    const current = saved ? JSON.parse(saved) : {};
+    current[field] = value;
+
+    if (field === "age") setAge(value);
+    if (field === "weight") setWeight(value);
+    if (field === "gender") setGender(value);
+
+    localStorage.setItem("medai_patient_profile", JSON.stringify(current));
+  };
+
   const handleQuickConsult = () => {
     if (question.trim()) {
       navigate("/consultation");
@@ -57,8 +79,8 @@ export default function Dashboard() {
 
   return (
     <div className="relative min-h-[calc(100vh-6rem)] overflow-hidden">
-      {/* Holographic Human Body — Background */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[2%] w-[520px] h-[680px] z-0 pointer-events-none select-none opacity-70">
+      {/* Holographic Human Body — Background (shifted down to prevent overlap with greeting) */}
+      <div className="absolute left-0 top-[60%] -translate-y-[45%] -translate-x-[2%] w-[480px] h-[630px] z-0 pointer-events-none select-none opacity-70">
         <HumanBodySVG className="w-full h-full" />
       </div>
 
@@ -131,7 +153,7 @@ export default function Dashboard() {
                     min="0"
                     max="120"
                     value={age}
-                    onChange={(e) => setAge(e.target.value)}
+                    onChange={(e) => handleProfileChange("age", e.target.value)}
                     className="input-premium w-full text-sm"
                     placeholder={language === "hi" ? "जैसे 34" : "e.g. 34"}
                   />
@@ -149,7 +171,7 @@ export default function Dashboard() {
                     type="number"
                     min="0"
                     value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
+                    onChange={(e) => handleProfileChange("weight", e.target.value)}
                     className="input-premium w-full text-sm"
                     placeholder={language === "hi" ? "जैसे 70" : "e.g. 70 kg"}
                   />
@@ -164,7 +186,7 @@ export default function Dashboard() {
                 <select
                   id="dashboard-gender"
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  onChange={(e) => handleProfileChange("gender", e.target.value)}
                   className="input-premium w-full text-sm appearance-none cursor-pointer"
                 >
                   <option value="">{t.selectGender}</option>

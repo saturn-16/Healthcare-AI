@@ -2,9 +2,14 @@
   "name": "healthcare-ai-root",
   "private": true,
   "workspaces": [
-    "frontend"
+    "frontend",
+    "backend"
   ],
   "scripts": {
-    "build": "npm run build -w frontend && npx shx rm -rf ./dist && npx shx mv frontend/dist ./dist"
+    "build": "npm run build -w frontend && npx shx rm -rf ./dist && npx shx mv frontend/dist ./dist",
+    "dev": "concurrently \"npm run dev -w frontend\" \"npm start -w backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

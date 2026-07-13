@@ -6,6 +6,7 @@ export const translations = {
   en: {
     appName: "MedAI",
     appTagline: "AI Healthcare Assistant",
+    home: "Home",
     dashboard: "Dashboard",
     aiConsultation: "AI Consultation",
     symptomChecker: "Symptom Checker",
@@ -62,6 +63,7 @@ export const translations = {
   hi: {
     appName: "MedAI",
     appTagline: "AI स्वास्थ्य सहायक",
+    home: "मुख्य पृष्ठ",
     dashboard: "डैशबोर्ड",
     aiConsultation: "AI परामर्श",
     symptomChecker: "लक्षण जांचकर्ता",

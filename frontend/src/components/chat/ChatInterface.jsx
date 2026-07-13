@@ -5,6 +5,7 @@ import { cn } from "../../utils/cn";
 import geminiService from "../../services/GeminiService";
 import { useLanguage } from "../../context/LanguageContext";
 import ReactMarkdown from "react-markdown";
+import { db } from "../../services/db";
 
 export default function ChatInterface({ patientData, selectedCategory }) {
   const { language, t } = useLanguage();
@@ -12,24 +13,188 @@ export default function ChatInterface({ patientData, selectedCategory }) {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
+  
   const endOfMessagesRef = useRef(null);
   const textareaRef = useRef(null);
+  const chatAreaRef = useRef(null);
+  const currentSessionId = useRef(null);
 
   // Update greeting and service language when language changes
   useEffect(() => {
     geminiService.setLanguage(language);
+    
+    const welcomeMessage = language === "hi"
+      ? "नमस्ते! मैं डॉ. मेडएआई हूँ, आपका एआई स्वास्थ्य सहायक। कृपया दाईं ओर **Patient Health Profile** भरें और **Analyze Profile** पर क्लिक करें ताकि मैं आपकी स्थिति की समीक्षा कर सकूं और परामर्श शुरू कर सकूं।"
+      : "Hello! I'm Dr. MedAI, your AI-powered healthcare assistant. Please fill in your **Patient Health Profile** on the right and click **Analyze Profile** so I can analyze your vitals and start our consultation.";
+
     setMessages([
       {
         id: "greeting",
         role: "ai",
-        content: t.greeting,
+        content: welcomeMessage,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       },
     ]);
-  }, [language, t.greeting]);
+  }, [language]);
 
+  // Handle profile submission from panel
   useEffect(() => {
-    endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!patientData) return;
+
+    const formattedProfile = `[Patient Health Profile Submitted]
+- Age: ${patientData.age || "N/A"}
+- Weight: ${patientData.weight || "N/A"} kg
+- Gender: ${patientData.gender || "N/A"}
+- Blood Group: ${patientData.bloodGroup || "N/A"}
+- Primary Symptoms: ${patientData.symptoms || "None"}
+- Allergies/History: ${patientData.allergies || "None"}`;
+
+    const alreadySubmitted = messages.some(m => m.content.includes("[Patient Health Profile Submitted]"));
+    if (alreadySubmitted) return;
+
+    const userMsg = {
+      id: Date.now(),
+      role: "user",
+      content: formattedProfile,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    triggerProfileConsultation(userMsg);
+  }, [patientData]);
+
+  // Automatically save/upsert active session to the SQLite database
+  const autoSaveActiveSession = async (latestMessages) => {
+    const userMsgs = latestMessages.filter(m => m.role === "user");
+    const aiMsgs = latestMessages.filter(m => m.role === "ai" && m.id !== "greeting");
+    
+    if (userMsgs.length === 0 || aiMsgs.length === 0) return;
+
+    // Skip saving if it's just greetings
+    const isTrivial = userMsgs.every(m => {
+      const content = m.content.toLowerCase().trim();
+      return content === "hi" || content === "hello" || content === "hey" || content === "नमस्ते" || content === "hello doctor";
+    });
+    if (isTrivial) return;
+
+    const symptomsString = userMsgs.map(m => m.content).join("; ").substring(0, 150);
+    const summaryText = aiMsgs[aiMsgs.length - 1].content;
+    
+    if (!summaryText || summaryText.trim().length === 0) return;
+
+    let risk_level = "Low";
+    const lowerText = summaryText.toLowerCase();
+    if (lowerText.includes("emergency") || lowerText.includes("immediate care") || lowerText.includes("severe") || lowerText.includes("गंभीर") || lowerText.includes("आपातकालीन")) {
+      risk_level = "High";
+    } else if (lowerText.includes("moderate") || lowerText.includes("consult a doctor") || lowerText.includes("चिकित्सक से") || lowerText.includes("मध्यम")) {
+      risk_level = "Moderate";
+    }
+
+    const storedProfile = localStorage.getItem("medai_patient_profile");
+    const profile = storedProfile ? JSON.parse(storedProfile) : {};
+
+    const payload = {
+      timestamp: new Date().toISOString(),
+      age: parseInt(profile.age || patientData?.age) || 34,
+      weight: parseInt(profile.weight || patientData?.weight) || 72,
+      gender: profile.gender || patientData?.gender || "male",
+      type: "consultation",
+      symptoms: selectedCategory ? `${selectedCategory}; ${symptomsString}` : symptomsString,
+      risk_level: risk_level,
+      summary: summaryText,
+      chat_history: JSON.stringify(latestMessages)
+    };
+
+    if (currentSessionId.current) {
+      payload.id = currentSessionId.current;
+    }
+
+    try {
+      const res = await fetch("/api/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.id) {
+          currentSessionId.current = data.id;
+          setIsSaved(true);
+        }
+      }
+    } catch (err) {
+      console.error("Auto-save failed:", err);
+    }
+  };
+
+  const triggerProfileConsultation = async (userMsg) => {
+    setIsTyping(true);
+    setMessages((prev) => [...prev, userMsg]);
+
+    const aiMsgId = Date.now() + 1;
+    let fullResponse = "";
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: aiMsgId,
+        role: "ai",
+        content: "",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
+
+    const promptText = `${userMsg.content}
+    
+    Please analyze my profile as a professional, friendly, and expert doctor. Address me directly and tell me what you observe, then ask relevant clinical follow-up questions to understand my state better.`;
+
+    try {
+      await geminiService.streamResponse(
+        promptText,
+        (chunk) => {
+          setIsTyping(false);
+          fullResponse += chunk;
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === aiMsgId ? { ...msg, content: fullResponse } : msg
+            )
+          );
+        },
+        patientData,
+        selectedCategory
+      );
+
+      // Auto-save session after profile stream completes
+      setMessages((prev) => {
+        const finalMessages = prev.map((msg) =>
+          msg.id === aiMsgId ? { ...msg, content: fullResponse } : msg
+        );
+        autoSaveActiveSession(finalMessages);
+        return finalMessages;
+      });
+
+    } catch (error) {
+      console.error("Profile Chat Error:", error);
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === aiMsgId
+            ? { ...msg, content: language === "hi" ? "क्षमा करें, आपके प्रोफ़ाइल का विश्लेषण करने में एक त्रुटि हुई।" : "Sorry, I encountered an error analyzing your profile." }
+            : msg
+        )
+      );
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  // Scroll only the chat container div
+  useEffect(() => {
+    if (chatAreaRef.current) {
+      chatAreaRef.current.scrollTo({
+        top: chatAreaRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
   }, [messages, isTyping]);
 
   const handleSend = async () => {
@@ -81,6 +246,16 @@ export default function ChatInterface({ patientData, selectedCategory }) {
         patientData,
         selectedCategory
       );
+
+      // Auto-save session after message stream completes
+      setMessages((prev) => {
+        const finalMessages = prev.map((msg) =>
+          msg.id === aiMsgId ? { ...msg, content: fullResponse } : msg
+        );
+        autoSaveActiveSession(finalMessages);
+        return finalMessages;
+      });
+
     } catch (error) {
       console.error("Chat Error:", error);
       setMessages((prev) =>
@@ -103,11 +278,18 @@ export default function ChatInterface({ patientData, selectedCategory }) {
 
   const handleClear = () => {
     geminiService.setLanguage(language);
+    currentSessionId.current = null;
+    setIsSaved(false);
+
+    const welcomeMessage = language === "hi"
+      ? "नमस्ते! मैं डॉ. मेडएआई हूँ, आपका एआई स्वास्थ्य सहायक। कृपया दाईं ओर **Patient Health Profile** भरें और **Analyze Profile** पर क्लिक करें ताकि मैं आपकी स्थिति की समीक्षा कर सकूं और परामर्श शुरू कर सकूं।"
+      : "Hello! I'm Dr. MedAI, your AI-powered healthcare assistant. Please fill in your **Patient Health Profile** on the right and click **Analyze Profile** so I can analyze your vitals and start our consultation.";
+
     setMessages([
       {
         id: "greeting",
         role: "ai",
-        content: t.greeting,
+        content: welcomeMessage,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       },
     ]);
@@ -154,6 +336,12 @@ export default function ChatInterface({ patientData, selectedCategory }) {
               {selectedCategory}
             </span>
           )}
+          {isSaved && (
+            <span className="flex items-center gap-1 text-[11px] bg-green-50 text-green-600 border border-green-200/50 rounded-full px-2.5 py-1 font-semibold animate-fade-in">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span>{language === "hi" ? "सहेजा गया" : "Synced to SQL"}</span>
+            </span>
+          )}
           <button
             onClick={handleClear}
             className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
@@ -165,7 +353,7 @@ export default function ChatInterface({ patientData, selectedCategory }) {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-5 z-10">
+      <div ref={chatAreaRef} className="flex-1 overflow-y-auto p-6 space-y-5 z-10">
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div
