@@ -93,10 +93,10 @@ export default function LandingPage() {
               <ArrowRight className="h-4 w-4 ml-1" />
             </Link>
             <Link
-              to="/dashboard"
+              to="/symptoms"
               className="btn-secondary flex items-center gap-2 hover:scale-105 transition-all px-6 py-3"
             >
-              <span>{language === "hi" ? "डैशबोर्ड पर जाएं" : "Access Dashboard"}</span>
+              <span>{language === "hi" ? "लक्षणों की जाँच करें" : "Symptom Checker"}</span>
             </Link>
           </motion.div>
 

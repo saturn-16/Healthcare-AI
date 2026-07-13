@@ -45,10 +45,9 @@ export const StaggeredMenu = ({
   const busyRef = useRef(false);
   const itemEntranceTweenRef = useRef(null);
 
-  // Dynamic translated menu items, including Home (/) and Dashboard (/dashboard)
+  // Dynamic translated menu items
   const menuItems = [
     { label: t.home, ariaLabel: 'Go to home page', link: '/' },
-    { label: t.dashboard, ariaLabel: 'Go to dashboard', link: '/dashboard' },
     { label: t.aiConsultation, ariaLabel: 'Start AI Consultation', link: '/consultation' },
     { label: t.symptomChecker, ariaLabel: 'Open Symptom Checker', link: '/symptoms' },
     { label: t.healthHistory, ariaLabel: 'View Health History', link: '/history' },

@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { LanguageProvider } from "./context/LanguageContext";
 import MainLayout from "./components/layout/MainLayout";
-import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
 import AIConsultation from "./pages/AIConsultation";
 import SymptomChecker from "./pages/SymptomChecker";
@@ -20,7 +19,6 @@ const AnimatedRoutes = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<LandingPage />} />
-          <Route path="dashboard" element={<Dashboard />} />
           <Route path="consultation" element={<AIConsultation />} />
           <Route path="symptoms" element={<SymptomChecker />} />
           <Route path="history" element={<History />} />
