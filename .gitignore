@@ -31,7 +31,9 @@ wheels/
 
 # Node.js
 node_modules/
+package-lock.json
 frontend/node_modules/
+frontend/package-lock.json
 frontend/dist/
 frontend/dist-ssr/
 frontend/.vercel/
