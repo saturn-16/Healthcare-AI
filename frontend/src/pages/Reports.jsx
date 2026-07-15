@@ -90,7 +90,7 @@ export default function Reports() {
       रिपोर्ट को बिल्कुल निम्नलिखित प्रारूप (Markdown Table & Headers) में व्यवस्थित करें:
       
       # क्लीनिकल प्रगति और स्वास्थ्य निदान रिपोर्ट
-      **मेडएआई क्लीनिकल सेंटर (MedAI Clinical Center)**
+      **नोवस एआई क्लीनिकल सेंटर (NOVUS AI Clinical Center)**
       
       ### 📋 रोगी का विवरण (PATIENT METRICS SUMMARY)
       | पैरामीटर (Parameter) | मान (Value) |
@@ -135,7 +135,7 @@ export default function Reports() {
       Ensure you output the report strictly using the following Markdown Hospital Template:
       
       # CLINICAL DISCHARGE & PROGRESS REPORT
-      **MedAI Clinical Center**
+      **NOVUS AI Clinical Center**
       
       ### 📋 PATIENT METRICS SUMMARY
       | Patient Metric | Value |
@@ -238,7 +238,7 @@ export default function Reports() {
           <p className="text-sm text-gray-500 mt-1">
             {language === "hi"
               ? "आपके स्वास्थ्य इतिहास के आधार पर विस्तृत चिकित्सा और प्रगति रिपोर्ट तैयार करें।"
-              : "Compile detailed, multi-encounter health reports compiled from your local SQL database."}
+              : "Compile detailed, multi-encounter health reports compiled from your health history."}
           </p>
         </div>
 
@@ -263,8 +263,8 @@ export default function Reports() {
           <History className="h-4 w-4 text-gray-400" />
           <span>
             {language === "hi" 
-              ? `SQL डेटाबेस रिकॉर्ड: ${historyCount} आकलन उपलब्ध` 
-              : `SQL History Status: ${historyCount} assessment records stored`}
+              ? `सहेजे गए रिकॉर्ड: ${historyCount} आकलन उपलब्ध` 
+              : `History Status: ${historyCount} assessment records stored`}
           </span>
         </div>
         {historyCount === 0 && (
@@ -298,7 +298,7 @@ export default function Reports() {
             </span>
           </div>
           <div className="prose prose-sm max-w-none text-xs md:text-sm font-mono text-gray-700 bg-white border border-gray-100 rounded-2xl p-5 overflow-y-auto max-h-[350px]">
-            <ReactMarkdown>{generatedContent || "Reading clinical SQL data..."}</ReactMarkdown>
+            <ReactMarkdown>{generatedContent || "Reading clinical records..."}</ReactMarkdown>
           </div>
         </motion.div>
       )}
