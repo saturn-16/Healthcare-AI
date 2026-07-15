@@ -25,8 +25,8 @@ export default function ChatInterface({ patientData, selectedCategory }) {
     geminiService.setLanguage(language);
     
     const welcomeMessage = language === "hi"
-      ? "नमस्ते! मैं डॉ. मेडएआई हूँ, आपका एआई स्वास्थ्य सहायक। कृपया दाईं ओर **Patient Health Profile** भरें और **Analyze Profile** पर क्लिक करें ताकि मैं आपकी स्थिति की समीक्षा कर सकूं और परामर्श शुरू कर सकूं।"
-      : "Hello! I'm Dr. MedAI, your AI-powered healthcare assistant. Please fill in your **Patient Health Profile** on the right and click **Analyze Profile** so I can analyze your vitals and start our consultation.";
+      ? "नमस्ते! मैं डॉ. नोवस एआई हूँ, आपका एआई स्वास्थ्य सहायक। कृपया दाईं ओर **Patient Health Profile** भरें और **Analyze Profile** पर क्लिक करें ताकि मैं आपकी स्थिति की समीक्षा कर सकूं और परामर्श शुरू कर सकूं।"
+      : "Hello! I'm Dr. Novus AI, your AI-powered healthcare assistant. Please fill in your **Patient Health Profile** on the right and click **Analyze Profile** so I can analyze your vitals and start our consultation.";
 
     setMessages([
       {
@@ -282,8 +282,8 @@ export default function ChatInterface({ patientData, selectedCategory }) {
     setIsSaved(false);
 
     const welcomeMessage = language === "hi"
-      ? "नमस्ते! मैं डॉ. मेडएआई हूँ, आपका एआई स्वास्थ्य सहायक। कृपया दाईं ओर **Patient Health Profile** भरें और **Analyze Profile** पर क्लिक करें ताकि मैं आपकी स्थिति की समीक्षा कर सकूं और परामर्श शुरू कर सकूं।"
-      : "Hello! I'm Dr. MedAI, your AI-powered healthcare assistant. Please fill in your **Patient Health Profile** on the right and click **Analyze Profile** so I can analyze your vitals and start our consultation.";
+      ? "नमस्ते! मैं डॉ. नोवस एआई हूँ, आपका एआई स्वास्थ्य सहायक। कृपया दाईं ओर **Patient Health Profile** भरें और **Analyze Profile** पर क्लिक करें ताकि मैं आपकी स्थिति की समीक्षा कर सकूं और परामर्श शुरू कर सकूं।"
+      : "Hello! I'm Dr. Novus AI, your AI-powered healthcare assistant. Please fill in your **Patient Health Profile** on the right and click **Analyze Profile** so I can analyze your vitals and start our consultation.";
 
     setMessages([
       {
@@ -339,7 +339,7 @@ export default function ChatInterface({ patientData, selectedCategory }) {
           {isSaved && (
             <span className="flex items-center gap-1 text-[11px] bg-green-50 text-green-600 border border-green-200/50 rounded-full px-2.5 py-1 font-semibold animate-fade-in">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span>{language === "hi" ? "सहेजा गया" : "Synced to SQL"}</span>
+              <span>{language === "hi" ? "सहेजा गया" : "Securely Synced"}</span>
             </span>
           )}
           <button

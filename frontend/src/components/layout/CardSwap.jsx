@@ -83,7 +83,8 @@ const CardSwap = ({
       tlRef.current = tl;
 
       tl.to(elFront, {
-        y: '+=500',
+        y: '+=160',
+        opacity: 0,
         duration: config.durDrop,
         ease: config.ease
       });
@@ -121,6 +122,7 @@ const CardSwap = ({
           x: backSlot.x,
           y: backSlot.y,
           z: backSlot.z,
+          opacity: 1,
           duration: config.durReturn,
           ease: config.ease
         },

@@ -81,105 +81,11 @@ export default function History() {
           </h2>
           <p className="text-sm text-gray-500 mt-1">
             {language === "hi"
-              ? "आपके इन-ब्राउज़र SQL डेटाबेस में सहेजे गए सभी पिछले क्लीनिकल मूल्यांकन।"
-              : "Access and query past clinical assessments logged in your browser's local SQL database."}
+              ? "आपके स्वास्थ्य इतिहास में सहेजे गए सभी पिछले क्लीनिकल मूल्यांकन।"
+              : "Access and query past clinical assessments logged in your health history profile."}
           </p>
         </div>
-
-        {/* Database Console Toggle */}
-        <button
-          onClick={() => setShowSqlConsole(!showSqlConsole)}
-          className="flex items-center gap-2 px-4 py-2 border border-blue-200 bg-blue-50/50 hover:bg-blue-50 rounded-xl text-blue-600 text-sm font-semibold transition-colors cursor-pointer"
-        >
-          <Database className="h-4 w-4" />
-          <span>{showSqlConsole ? (language === "hi" ? "कंसोल छुपाएं" : "Close SQL Console") : (language === "hi" ? "SQL कंसोल" : "SQL Sandbox Console")}</span>
-        </button>
       </div>
-
-      {/* SQL Sandbox Console Panel */}
-      <AnimatePresence>
-        {showSqlConsole && (
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            className="card-elevated p-6 border border-blue-100 bg-blue-50/10 space-y-4"
-          >
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-              <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                <Database className="h-4 w-4 text-blue-500" />
-                <span>SQL Query Sandbox (AlaSQL Engine)</span>
-              </h3>
-              <span className="text-[10px] bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">
-                Active Tables: health_history, clinical_reports
-              </span>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block">
-                Write SELECT or DELETE Queries
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={sqlQuery}
-                  onChange={(e) => setSqlQuery(e.target.value)}
-                  className="flex-1 font-mono text-xs bg-gray-900 text-green-400 p-3 rounded-xl border border-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <button
-                  onClick={executeSql}
-                  className="px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex items-center justify-center gap-1 text-xs font-bold shadow-md shadow-blue-500/10 cursor-pointer"
-                >
-                  <Play className="h-3 w-3 fill-white" />
-                  <span>Run</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Error state */}
-            {sqlError && (
-              <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-xs text-red-600 flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 flex-shrink-0" />
-                <span>{sqlError}</span>
-              </div>
-            )}
-
-            {/* SQL Results Table */}
-            {sqlResult && (
-              <div className="overflow-x-auto max-h-[300px] border border-gray-150 rounded-xl bg-white">
-                <table className="min-w-full divide-y divide-gray-150 text-left text-xs">
-                  <thead className="bg-gray-50 text-gray-500 font-semibold uppercase tracking-wider">
-                    <tr>
-                      {Object.keys(sqlResult[0] || {}).map((key) => (
-                        <th key={key} className="px-4 py-3">{key}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 text-gray-700">
-                    {sqlResult.length === 0 ? (
-                      <tr>
-                        <td colSpan={10} className="px-4 py-6 text-center text-gray-400">
-                          Query returned empty set.
-                        </td>
-                      </tr>
-                    ) : (
-                      sqlResult.map((row, idx) => (
-                        <tr key={idx} className="hover:bg-gray-50/50">
-                          {Object.values(row).map((val, i) => (
-                            <td key={i} className="px-4 py-3 font-mono text-[11px] truncate max-w-[250px]">
-                              {typeof val === "object" ? JSON.stringify(val) : String(val)}
-                            </td>
-                          ))}
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* History timeline feed */}
       {encounters.length === 0 ? (
@@ -191,7 +97,7 @@ export default function History() {
           <p className="text-sm text-gray-400 max-w-sm mx-auto">
             {language === "hi"
               ? "स्वास्थ्य इतिहास खाली है। परामर्श शुरू करने या लक्षण जांच का उपयोग करने पर यहां इतिहास दिखाई देगा।"
-              : "Your clinical database is currently empty. Complete an AI Consultation or Symptom check to populate your logs."}
+              : "Your health history is currently empty. Complete an AI Consultation or Symptom check to populate your logs."}
           </p>
         </div>
       ) : (

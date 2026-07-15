@@ -281,7 +281,7 @@ export default function LandingPage() {
       <div className="w-full mt-4 md:mt-6 border-t border-gray-100/80 pt-10 md:pt-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Solution Descriptions */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-6 max-w-[480px]">
             <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold tracking-wide text-blue-600 uppercase">
               <Sparkles className="h-3 w-3" />
               <span>{language === "hi" ? "एआई स्वास्थ्य समाधान" : "Intelligent Platform Solutions"}</span>
@@ -316,19 +316,17 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Card Stack Swap */}
-          <div className="lg:col-span-7 flex justify-center items-center relative min-h-[480px] w-full">
-            <div style={{ height: '530px', width: '100%', position: 'relative', overflow: 'visible' }} className="flex items-center justify-center">
+          <div className="lg:col-span-7 flex justify-center items-center relative min-h-[400px] w-full">
+            <div style={{ height: '420px', width: '460px', position: 'relative', overflow: 'visible' }} className="flex items-center justify-center translate-x-4 md:translate-x-10 mx-auto">
               <CardSwap
-                width={620}
-                height={380}
-                cardDistance={52}
-                verticalDistance={46}
+                width={460}
+                height={320}
+                cardDistance={35}
+                verticalDistance={30}
                 delay={1600}
-                pauseOnHover
               >
                 {/* Card 1 */}
-                <Card className="flex flex-col justify-between h-full bg-slate-950/95 rounded-3xl border border-white/5 p-8 shadow-2xl">
+                <Card className="flex flex-col justify-between h-full bg-transparent shadow-none border-none p-0">
                   <div className="space-y-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-950/40 text-blue-400 shadow-inner">
                       <Activity className="h-6 w-6" />
@@ -349,7 +347,7 @@ export default function LandingPage() {
                 </Card>
 
                 {/* Card 2 */}
-                <Card className="flex flex-col justify-between h-full bg-slate-950/95 rounded-3xl border border-white/5 p-8 shadow-2xl">
+                <Card className="flex flex-col justify-between h-full bg-transparent shadow-none border-none p-0">
                   <div className="space-y-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-950/40 text-indigo-400 shadow-inner">
                       <Stethoscope className="h-6 w-6" />
@@ -370,7 +368,7 @@ export default function LandingPage() {
                 </Card>
 
                 {/* Card 3 */}
-                <Card className="flex flex-col justify-between h-full bg-slate-950/95 rounded-3xl border border-white/5 p-8 shadow-2xl">
+                <Card className="flex flex-col justify-between h-full bg-transparent shadow-none border-none p-0">
                   <div className="space-y-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-950/40 text-cyan-400 shadow-inner">
                       <FileText className="h-6 w-6" />
@@ -391,7 +389,7 @@ export default function LandingPage() {
                 </Card>
 
                 {/* Card 4 */}
-                <Card className="flex flex-col justify-between h-full bg-slate-950/95 rounded-3xl border border-white/5 p-8 shadow-2xl">
+                <Card className="flex flex-col justify-between h-full bg-transparent shadow-none border-none p-0">
                   <div className="space-y-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-950/40 text-teal-400 shadow-inner">
                       <Globe className="h-6 w-6" />

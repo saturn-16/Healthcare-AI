@@ -88,7 +88,8 @@
 .sm-toggle-textWrap {
   position: relative;
   display: inline-block;
-  height: 1.2em;
+  vertical-align: middle;
+  height: 1.5em;
   overflow: hidden;
   white-space: nowrap;
   width: var(--sm-toggle-width, 4.2rem);
@@ -96,17 +97,21 @@
 }
 
 .sm-toggle-textInner {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
+  display: block;
   text-align: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Slide up to show 'Close' when the menu is open */
+.staggered-menu-wrapper[data-open] .sm-toggle-textInner {
+  transform: translateY(-1.5em);
 }
 
 .sm-toggle-line {
-  display: flex;
-  align-items: center;
-  height: 1.2em;
-  line-height: 1.2;
+  display: block;
+  height: 1.5em;
+  line-height: 1.5em;
 }
 
 .sm-icon {
