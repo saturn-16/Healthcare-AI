@@ -293,7 +293,7 @@ export default function LandingPage() {
                 : "Clinical Assistance Empowering Patients & Doctors"}
             </h2>
             
-            <p className="text-base text-gray-500 leading-relaxed">
+            <p className="text-sm text-gray-500 leading-relaxed">
               {language === "hi"
                 ? "हमारा सुरक्षित हेल्थकेयर एआई प्लेटफॉर्म जटिल चिकित्सा डेटा को सुलझाता है, जिससे आपके स्वास्थ्य को प्रबंधित करना और चिकित्सा नियुक्तियों के लिए तैयार होना आसान हो जाता है।"
                 : "Our secure healthcare AI platform simplifies complex medical data, making it effortless to manage your health and prepare for clinical appointments with confidence."}
@@ -316,8 +316,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-7 flex justify-center items-center relative min-h-[400px] w-full">
-            <div style={{ height: '420px', width: '460px', position: 'relative', overflow: 'visible' }} className="flex items-center justify-center translate-x-4 md:translate-x-10 mx-auto">
+          <div className="lg:col-span-7 flex justify-center items-center relative min-h-[400px] w-full" style={{ contain: 'layout' }}>
+            <div style={{ height: '420px', width: '460px', position: 'relative', overflow: 'visible' }} className="flex items-center justify-center translate-x-0 md:translate-x-4 mx-auto">
               <CardSwap
                 width={460}
                 height={320}
