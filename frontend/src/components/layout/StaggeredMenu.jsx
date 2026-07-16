@@ -381,13 +381,41 @@ export const StaggeredMenu = ({
           </button>
 
           {/* Logo Branding */}
-          <div className="sm-logo flex flex-col justify-center select-none ml-1" aria-label="Logo">
-            <span className="text-xl font-bold tracking-tight text-gray-900 block leading-none">
-              {t.appName}
-            </span>
-            <span className="text-[10px] text-blue-600 font-semibold tracking-wider uppercase mt-1">
-              {t.appTagline}
-            </span>
+          <div className="sm-logo flex items-center gap-2 select-none ml-1" aria-label="Logo">
+            <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm-logo-icon" style={{ flexShrink: 0 }}>
+              <defs>
+                <linearGradient id="headerBgGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#863bff"/>
+                  <stop offset="100%" stopColor="#47bfff"/>
+                </linearGradient>
+                <linearGradient id="headerPulseGrad" x1="8" y1="24" x2="40" y2="24" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9"/>
+                  <stop offset="50%" stopColor="#ffffff"/>
+                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9"/>
+                </linearGradient>
+                <filter id="headerGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <rect x="2" y="2" width="44" height="44" rx="12" ry="12" fill="url(#headerBgGrad)"/>
+              <rect x="4" y="4" width="40" height="40" rx="10" ry="10" fill="none" stroke="white" strokeOpacity="0.15" strokeWidth="1"/>
+              <path d="M24 38 C24 38 10 29 10 20 C10 15.5 13.5 12 17.5 12 C20 12 22.5 13.5 24 16 C25.5 13.5 28 12 30.5 12 C34.5 12 38 15.5 38 20 C38 29 24 38 24 38Z" fill="white" fillOpacity="0.2"/>
+              <polyline points="7,25 14,25 17,25 19,18 21,32 23,14 25,30 27,20 29,25 32,25 41,25" fill="none" stroke="url(#headerPulseGrad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" filter="url(#headerGlow)"/>
+              <rect x="23" y="5.5" width="2" height="8" rx="0.5" fill="white" fillOpacity="0.6"/>
+              <rect x="20.5" y="8.5" width="7" height="2" rx="0.5" fill="white" fillOpacity="0.6"/>
+            </svg>
+            <div className="flex flex-col justify-center">
+              <span className="text-xl font-bold tracking-tight text-gray-900 block leading-none">
+                {t.appName}
+              </span>
+              <span className="text-[10px] text-blue-600 font-semibold tracking-wider uppercase mt-0.5">
+                {t.appTagline}
+              </span>
+            </div>
           </div>
         </div>
 
